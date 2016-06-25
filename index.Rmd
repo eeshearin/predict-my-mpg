@@ -1,0 +1,74 @@
+---
+title       : Compare My Car
+subtitle    : A Useful Fuel Economy Tool
+author      : Emma Shearin
+job         : Chief Car Tools Person
+framework   : io2012        # {io2012, html5slides, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+
+---
+
+## Applications
+
+What can we do with this tool?
+
+1. Compare old car fuel economies by weight
+2. Help consumers decide which car to buy
+
+---  
+
+## Mechanisms
+
+The tool produces a plot based on a customer's entries that compares their current car's weight and fuel economy to the car that they wish to buy, predicting the new car's fuel economy. For example, if the consumer owns a Mazda RX4 and wishes to buy a car weighing 3200 pounds:
+
+```{r, echo= FALSE, results='asis'}
+library(datasets)
+data(mtcars)
+par(pin = c(1.5,1.5), mar = c(8,8,2,2))
+# to use data given in example, this code replaces "input$carnum" with q and "input$newcar" with z
+q <- 10
+z <- 3.2
+# generate best fit line and predict the fuel economy of the new car based on input$newcar from ui.R
+fit <- lm(mpg ~ wt, mtcars)
+pfe <- coef(fit)[1] + (z * coef(fit)[2] )
+pwt <- 3.2
+
+# generate comparison line based on consumer's current car
+rn <- q
+ofe <- mtcars[rn, 1]
+owt <- mtcars[rn, 6]
+
+# draw the plot showing the lines at input and predicted values
+plot(mtcars$wt, mtcars$mpg, type = "p", main = "Comparison of your selected cars", xlab = "weight (thousands of pounds)", ylab = "fuel economy (mpg)", cex = 5)
+abline(fit)
+points(y = pfe, x = pwt, col = "blue", pch = 4, cex = 6)
+points(y = ofe, x = owt, col = "red", pch = 4, cex = 6)
+```
+
+---
+
+## Code
+
+The tool is based on two main functions:
+
+1. Predicting the new fuel economy
+2. Plotting data to compare the new data to the old data
+
+The tool uses linear regression to accomplish its prediction and the graphics package in R to plot the data.
+
+---
+
+## Recommendations
+
+This tool works best for people who own one of the 32 car models included in the tool, listed here.
+```{r, echo = FALSE}
+library(datasets)
+data("mtcars")
+row.names(mtcars)
+```
+
+---
