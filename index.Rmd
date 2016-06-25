@@ -70,5 +70,3 @@ library(datasets)
 data("mtcars")
 row.names(mtcars)
 ```
-
----
